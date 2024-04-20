@@ -1,9 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using System.Collections.Generic;
 
 [System.Serializable]
-public class WorldState
+public class WorldState 
 {
     public string key;
     public int value;
@@ -11,47 +9,67 @@ public class WorldState
 
 public class WorldStates
 {
+    // Constructor
     public Dictionary<string, int> states;
 
-    public WorldStates()
+    public WorldStates() 
     {
         states = new Dictionary<string, int>();
     }
 
+    /************** Helper funtions ****************/
+    // Check for a key
     public bool HasState(string key)
     {
         return states.ContainsKey(key);
     }
 
-    void AddState(string key, int value)
+    // Add to our dictionary
+    private void AddState(string key, int value)
     {
         states.Add(key, value);
     }
 
     public void ModifyState(string key, int value)
     {
-        if (states.ContainsKey(key))
+        // If it contains this key
+        if (HasState(key)) 
         {
+            // Add the value to the state
             states[key] += value;
-            if (states[key] <= 0)
+            // If it's less than zero then remove it
+            if (states[key] <= 0) 
+            {
+                // Call the RemoveState method
                 RemoveState(key);
+            }
+        } else 
+        {
+            AddState(key, value);
         }
-        else
-            states.Add(key, value);
     }
 
-    public void RemoveState(string key)
+    // Method to remove a state
+    private void RemoveState(string key) 
     {
-        if (states.ContainsKey(key))
+        // Check if it frist exists
+        if (HasState(key))
+        { 
             states.Remove(key);
+        }
     }
 
-    public void SetState(string key, int value)
+    // Set a state
+    public void SetState(string key, int value) 
     {
-        if (states.ContainsKey(key))
+        // Check if it exists
+        if (HasState(key)) 
+        {
             states[key] = value;
-        else
-            states.Add(key, value);
+        } else 
+        {
+            AddState(key, value);
+        }
     }
 
     public Dictionary<string, int> GetStates()
